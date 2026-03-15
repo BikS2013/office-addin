@@ -38,6 +38,7 @@ src/taskpane/
 ## Configuration
 
 No fallback values for configuration settings. Missing config raises exceptions.
+See [Configuration Guide](docs/design/configuration-guide.md) for all configuration sources, schemas, and management details.
 
 ## Tools
 

@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "resolveJsonModule": true,
+    "paths": {
+      "@types/*": ["taskpane/types/*"],
+      "@services/*": ["taskpane/services/*"],
+      "@hooks/*": ["taskpane/hooks/*"],
+      "@components/*": ["taskpane/components/*"],
+      "@context/*": ["taskpane/context/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "test_scripts"]
+}

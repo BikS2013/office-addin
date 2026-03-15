@@ -1,0 +1,284 @@
+{
+  "configVersion": "1.0",
+  "name": "AI Text Processing Suite",
+  "description": "A collection of AI-powered text processing APIs for document workflows",
+  "groups": [
+    {
+      "id": "text-analysis",
+      "name": "Text Analysis",
+      "description": "Analyze and extract information from text",
+      "apis": [
+        {
+          "id": "summarize",
+          "name": "Summarize Text",
+          "description": "Generate a concise summary of the provided text",
+          "url": "https://api.example.com/v1/summarize",
+          "method": "POST",
+          "inputMode": "both",
+          "timeout": 30000,
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY",
+            "X-Request-Source": "word-addin"
+          },
+          "bodyTemplate": {
+            "model": "gpt-4",
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a helpful assistant that summarizes text concisely."
+              },
+              {
+                "role": "user",
+                "content": "{{prompt}}\n\nText to summarize:\n{{text}}"
+              }
+            ],
+            "max_tokens": 1000
+          },
+          "responseField": "choices.0.message.content",
+          "promptTemplate": "Summarize the following text in 3-5 bullet points:"
+        },
+        {
+          "id": "extract-keywords",
+          "name": "Extract Keywords",
+          "description": "Extract key terms and phrases from the text",
+          "url": "https://api.example.com/v1/keywords",
+          "method": "POST",
+          "inputMode": "both",
+          "timeout": 15000,
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY"
+          },
+          "bodyTemplate": {
+            "text": "{{text}}",
+            "max_keywords": 10,
+            "language": "auto"
+          },
+          "responseField": "keywords"
+        },
+        {
+          "id": "sentiment",
+          "name": "Sentiment Analysis",
+          "description": "Analyze the sentiment and tone of selected text",
+          "url": "https://api.example.com/v1/sentiment",
+          "method": "POST",
+          "inputMode": "selected",
+          "timeout": 10000,
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY"
+          },
+          "bodyTemplate": {
+            "text": "{{text}}",
+            "detailed": true
+          },
+          "responseField": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "text-generation",
+      "name": "Text Generation",
+      "description": "Generate and transform text content",
+      "groups": [
+        {
+          "id": "rewriting",
+          "name": "Rewriting",
+          "description": "Rewrite and improve existing text",
+          "apis": [
+            {
+              "id": "rewrite-formal",
+              "name": "Make Formal",
+              "description": "Rewrite text in a formal, professional tone",
+              "url": "https://api.example.com/v1/chat",
+              "method": "POST",
+              "inputMode": "selected",
+              "timeout": 20000,
+              "headers": {
+                "Authorization": "Bearer YOUR_API_KEY"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Rewrite the provided text in a formal, professional tone. Preserve the original meaning."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{text}}"
+                  }
+                ]
+              },
+              "responseField": "choices.0.message.content"
+            },
+            {
+              "id": "rewrite-simple",
+              "name": "Simplify",
+              "description": "Simplify complex text for easier understanding",
+              "url": "https://api.example.com/v1/chat",
+              "method": "POST",
+              "inputMode": "selected",
+              "timeout": 20000,
+              "headers": {
+                "Authorization": "Bearer YOUR_API_KEY"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Simplify the following text so it can be easily understood. Use plain language."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{text}}"
+                  }
+                ]
+              },
+              "responseField": "choices.0.message.content"
+            },
+            {
+              "id": "fix-grammar",
+              "name": "Fix Grammar & Spelling",
+              "description": "Correct grammar, spelling, and punctuation errors",
+              "url": "https://api.example.com/v1/chat",
+              "method": "POST",
+              "inputMode": "selected",
+              "timeout": 15000,
+              "headers": {
+                "Authorization": "Bearer YOUR_API_KEY"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Fix any grammar, spelling, and punctuation errors in the text. Only return the corrected text, no explanations."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{text}}"
+                  }
+                ]
+              },
+              "responseField": "choices.0.message.content"
+            }
+          ]
+        },
+        {
+          "id": "creation",
+          "name": "Content Creation",
+          "description": "Generate new content based on context",
+          "apis": [
+            {
+              "id": "continue-writing",
+              "name": "Continue Writing",
+              "description": "Generate a continuation of the document text",
+              "url": "https://api.example.com/v1/chat",
+              "method": "POST",
+              "inputMode": "full",
+              "timeout": 30000,
+              "headers": {
+                "Authorization": "Bearer YOUR_API_KEY"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Continue writing the document in the same style and tone. Generate 2-3 paragraphs."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{prompt}}\n\nDocument so far:\n{{text}}"
+                  }
+                ],
+                "max_tokens": 2000
+              },
+              "responseField": "choices.0.message.content",
+              "promptTemplate": "Continue the document naturally:"
+            },
+            {
+              "id": "generate-email",
+              "name": "Draft Email from Document",
+              "description": "Create an email draft based on the document content",
+              "url": "https://api.example.com/v1/chat",
+              "method": "POST",
+              "inputMode": "both",
+              "timeout": 25000,
+              "headers": {
+                "Authorization": "Bearer YOUR_API_KEY"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Based on the provided document content, draft a professional email. Include subject line, greeting, body, and closing."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{prompt}}\n\nDocument: {{documentName}}\n\nContent:\n{{text}}"
+                  }
+                ]
+              },
+              "responseField": "choices.0.message.content",
+              "promptTemplate": "Draft an email to share the key points of this document with the team:"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "translation",
+      "name": "Translation",
+      "description": "Translate text to other languages",
+      "apis": [
+        {
+          "id": "translate-en",
+          "name": "Translate to English",
+          "description": "Translate selected text to English",
+          "url": "https://api.example.com/v1/translate",
+          "method": "POST",
+          "inputMode": "selected",
+          "timeout": 15000,
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY"
+          },
+          "bodyTemplate": {
+            "text": "{{text}}",
+            "target_language": "en",
+            "source_language": "auto"
+          },
+          "responseField": "translation"
+        },
+        {
+          "id": "translate-custom",
+          "name": "Translate (Custom Language)",
+          "description": "Translate text to a language specified in the prompt",
+          "url": "https://api.example.com/v1/chat",
+          "method": "POST",
+          "inputMode": "both",
+          "timeout": 20000,
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY"
+          },
+          "bodyTemplate": {
+            "model": "gpt-4",
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a professional translator. Translate the text to the language specified by the user."
+              },
+              {
+                "role": "user",
+                "content": "{{prompt}}\n\nText:\n{{text}}"
+              }
+            ]
+          },
+          "responseField": "choices.0.message.content",
+          "promptTemplate": "Translate to French:"
+        }
+      ]
+    }
+  ]
+}

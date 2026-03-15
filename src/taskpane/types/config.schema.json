@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-sidebar.local/config.schema.json",
+  "title": "AddinConfiguration",
+  "description": "JSON Schema for the Word Add-in API Sidebar configuration",
+  "type": "object",
+  "required": ["configVersion", "name", "groups"],
+  "additionalProperties": false,
+  "properties": {
+    "configVersion": {
+      "type": "string",
+      "description": "Version of the configuration schema"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of this configuration"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of this configuration"
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Top-level API groups",
+      "items": {
+        "$ref": "#/definitions/ApiGroup"
+      }
+    }
+  },
+  "definitions": {
+    "ApiGroup": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier for the group"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Display name of the group"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of the group"
+        },
+        "groups": {
+          "type": "array",
+          "description": "Nested sub-groups",
+          "items": {
+            "$ref": "#/definitions/ApiGroup"
+          }
+        },
+        "apis": {
+          "type": "array",
+          "description": "API call configurations in this group",
+          "items": {
+            "$ref": "#/definitions/ApiCallConfig"
+          }
+        }
+      }
+    },
+    "ApiCallConfig": {
+      "type": "object",
+      "required": ["id", "name", "url", "method", "inputMode"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier for the API call"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Display name of the API call"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The API endpoint URL (must be HTTPS)"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "PATCH"],
+          "description": "HTTP method for the API call"
+        },
+        "inputMode": {
+          "type": "string",
+          "enum": ["selected", "full", "both"],
+          "description": "Determines which document text is sent: selected text, full document, or user chooses"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional HTTP headers to include in the request"
+        },
+        "bodyTemplate": {
+          "description": "Optional JSON body template with placeholder support"
+        },
+        "responseField": {
+          "type": "string",
+          "description": "Dot-notation path to extract a specific field from the response JSON"
+        },
+        "timeout": {
+          "type": "number",
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Request timeout in milliseconds (default: 30000)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of what this API call does"
+        }
+      }
+    }
+  }
+}

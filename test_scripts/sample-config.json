@@ -1,0 +1,147 @@
+{
+  "configVersion": "2.0",
+  "name": "Word Add-in Test Configuration",
+  "description": "Comprehensive sample configuration for testing purposes with multiple groups, APIs, and input modes.",
+  "groups": [
+    {
+      "id": "text-processing",
+      "name": "Text Processing",
+      "description": "APIs for text analysis and transformation",
+      "groups": [
+        {
+          "id": "summarization",
+          "name": "Summarization",
+          "description": "Summarization APIs",
+          "apis": [
+            {
+              "id": "summarize-selection",
+              "name": "Summarize Selection",
+              "description": "Summarizes the currently selected text in the document.",
+              "url": "https://api.example.com/v1/summarize",
+              "method": "POST",
+              "inputMode": "selected",
+              "timeout": 30000,
+              "headers": {
+                "Authorization": "Bearer {{api_key}}",
+                "X-Request-Source": "word-addin"
+              },
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You are a summarization assistant."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{prompt}}\n\nText:\n{{text}}"
+                  }
+                ],
+                "max_tokens": 1024
+              },
+              "promptTemplate": "Please summarize the following text concisely:",
+              "responseField": "choices.0.message.content"
+            },
+            {
+              "id": "summarize-full-doc",
+              "name": "Summarize Full Document",
+              "description": "Summarizes the entire document content.",
+              "url": "https://api.example.com/v1/summarize",
+              "method": "POST",
+              "inputMode": "full",
+              "timeout": 60000,
+              "bodyTemplate": {
+                "model": "gpt-4",
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "Summarize the document '{{documentName}}':\n\n{{text}}"
+                  }
+                ]
+              },
+              "responseField": "choices.0.message.content"
+            }
+          ]
+        },
+        {
+          "id": "translation",
+          "name": "Translation",
+          "description": "Translation APIs",
+          "apis": [
+            {
+              "id": "translate-to-spanish",
+              "name": "Translate to Spanish",
+              "description": "Translates selected text or full document to Spanish.",
+              "url": "https://api.example.com/v1/translate",
+              "method": "POST",
+              "inputMode": "both",
+              "timeout": 45000,
+              "bodyTemplate": {
+                "source_lang": "en",
+                "target_lang": "es",
+                "text": "{{text}}",
+                "context": "Document: {{documentName}}"
+              },
+              "responseField": "translation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "description": "Utility APIs for document operations",
+      "apis": [
+        {
+          "id": "health-check",
+          "name": "API Health Check",
+          "description": "Simple GET endpoint to check API availability.",
+          "url": "https://api.example.com/v1/health",
+          "method": "GET",
+          "inputMode": "selected",
+          "timeout": 5000,
+          "responseField": "status"
+        },
+        {
+          "id": "grammar-check",
+          "name": "Grammar Check",
+          "description": "Checks grammar of the selected text and returns suggestions.",
+          "url": "https://api.example.com/v1/grammar",
+          "method": "POST",
+          "inputMode": "selected",
+          "timeout": 20000,
+          "headers": {
+            "Authorization": "Bearer {{api_key}}",
+            "Content-Type": "application/json"
+          },
+          "bodyTemplate": {
+            "text": "{{text}}",
+            "prompt": "{{prompt}}",
+            "options": {
+              "language": "en-US",
+              "detailed": true
+            }
+          },
+          "promptTemplate": "Check the grammar and suggest corrections:",
+          "responseField": "result.corrections"
+        },
+        {
+          "id": "keyword-extract",
+          "name": "Extract Keywords",
+          "description": "Extracts keywords from the full document.",
+          "url": "https://api.example.com/v1/keywords",
+          "method": "POST",
+          "inputMode": "full",
+          "timeout": 25000,
+          "bodyTemplate": {
+            "document": "{{text}}",
+            "documentName": "{{documentName}}",
+            "maxKeywords": 20
+          },
+          "responseField": "keywords"
+        }
+      ]
+    }
+  ]
+}
